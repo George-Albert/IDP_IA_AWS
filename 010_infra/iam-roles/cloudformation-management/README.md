@@ -4,7 +4,7 @@ This directory contains the `IDP-Cloudformation-Service-Role.yaml` CloudFormatio
 
 ## <span style="color: blue;">Administrator Access and Deployment Options</span>
 
-**Note**: As detailed in [./docs/deployment.md](../docs/deployment.md), administrator access is required to deploy the GenAI IDP Accelerator solution. However, this directory provides an example CloudFormation service role that administrators can provision to allow other users to pass this role to CloudFormation for deploying and maintaining the solution stack without themselves needing administrator permissions.
+**Note**: As detailed in [./docs/deployment.md](../../../001_docs/deployment.md), administrator access is required to deploy the GenAI IDP Accelerator solution. However, this directory provides an example CloudFormation service role that administrators can provision to allow other users to pass this role to CloudFormation for deploying and maintaining the solution stack without themselves needing administrator permissions.
 
 This approach enables a security model where:
 - **Administrators** deploy this service role once with their elevated privileges

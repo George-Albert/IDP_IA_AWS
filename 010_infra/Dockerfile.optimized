@@ -28,7 +28,7 @@ ARG INSTALL_GIT=false
 WORKDIR /build
 
 # Copy idp_common_pkg and requirements for installation
-COPY lib/idp_common_pkg /tmp/idp_common_pkg
+COPY 020_shared/idp-packages/idp_common_pkg /tmp/idp_common_pkg
 COPY ${FUNCTION_PATH}/requirements.txt* /build/
 
 # Install all dependencies including idp_common_pkg in one step
@@ -36,7 +36,7 @@ COPY ${FUNCTION_PATH}/requirements.txt* /build/
 RUN --mount=from=uv,source=/uv,target=/bin/uv \
   --mount=type=cache,target=/root/.cache/uv \
   if [ -f /build/requirements.txt ]; then \
-  sed 's|^\.\./\.\.\(/\.\.\)\?/lib/idp_common_pkg|/tmp/idp_common_pkg|' /build/requirements.txt > /tmp/requirements.txt && \
+  sed 's|^\.\\/\.\\.\\(/\.\\.\\)\\?/020_shared/idp-packages/idp_common_pkg|/tmp/idp_common_pkg|' /build/requirements.txt > /tmp/requirements.txt && \
   uv pip install --python python3.12 --target "${LAMBDA_TASK_ROOT}" -r /tmp/requirements.txt && \
   rm /tmp/requirements.txt; \
   fi && \

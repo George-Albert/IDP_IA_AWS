@@ -400,7 +400,7 @@ class TestRegionFiltering:
     """Test that LambdaHook is preserved during region filtering.
 
     Note: The actual filter_models_by_region and swap_model_ids functions live in
-    src/lambda/update_configuration/index.py which can't be imported directly
+    040_modules/lambda/update_configuration/index.py which can't be imported directly
     because 'lambda' is a Python keyword. We use importlib to load the module.
     """
 
@@ -411,10 +411,10 @@ class TestRegionFiltering:
         import sys
         from pathlib import Path
 
-        # Add the src/lambda/update_configuration directory to sys.path
+        # Add the 040_modules/lambda/update_configuration directory to sys.path
         module_dir = (
-            Path(__file__).resolve().parents[4]
-            / "src"
+            Path(__file__).resolve().parents[4].parent
+            / "040_modules"
             / "lambda"
             / "update_configuration"
         )

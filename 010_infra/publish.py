@@ -23,7 +23,7 @@ import sys
 
 # Ensure lib packages are importable when running from project root
 _project_root = os.path.dirname(os.path.abspath(__file__))
-for _lib_pkg in ["lib/idp_sdk", "lib/idp_common_pkg", "lib/idp_cli_pkg"]:
+for _lib_pkg in ["020_shared/idp-packages/idp_sdk", "020_shared/idp-packages/idp_common_pkg", "020_shared/idp-packages/idp_cli_pkg"]:
     _lib_path = os.path.join(_project_root, _lib_pkg)
     if _lib_path not in sys.path and os.path.isdir(_lib_path):
         sys.path.insert(0, _lib_path)

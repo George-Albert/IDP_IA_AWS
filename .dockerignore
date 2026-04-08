@@ -30,7 +30,7 @@ build/
 .DS_Store
 
 # Documentation
-docs/
+001_docs/
 *.md
 LICENSE
 NOTICE
@@ -70,8 +70,8 @@ deploy*.py
 update_templates.py
 
 # Notebooks and samples
-notebooks/
-samples/
+070_samples/notebooks/
+070_samples/
 
 # CloudFormation packaged templates
 **/*.packaged.yaml
@@ -83,7 +83,7 @@ docker-compose*.yml
 
 # Other unnecessary files for Lambda
 images/
-scripts/
+090_scripts/
 memory-bank/
 *.xlsx
 *.pdf
@@ -95,5 +95,5 @@ memory-bank/
 
 # Keep only source code and requirements
 !patterns/*/src/**
-!lib/idp_common_pkg/**
-!src/lambda/**
+!020_shared/idp-packages/idp_common_pkg/**
+!040_modules/lambda/**

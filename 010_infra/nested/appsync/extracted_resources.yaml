@@ -33,7 +33,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/abort_workflow_resolver
+      CodeUri: ../../../040_modules/lambda/abort_workflow_resolver
       Description: Lambda function to abort document workflows via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -101,7 +101,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/agent_chat_resolver/
+      CodeUri: ../../../040_modules/lambda/agent_chat_resolver/
       Handler: index.handler
       Runtime: python3.12
       Environment:
@@ -169,7 +169,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/agent_request_handler/
+      CodeUri: ../../../040_modules/lambda/agent_request_handler/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
@@ -246,7 +246,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/chat_with_document_resolver
+      CodeUri: ../../../040_modules/lambda/chat_with_document_resolver
       Description: Lambda function to chat with the document via GraphQL API
       MemorySize: 512
       Timeout: 120
@@ -352,7 +352,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/configuration_resolver
+      CodeUri: ../../../040_modules/lambda/configuration_resolver
       Description: Lambda function to manage configuration through GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -418,7 +418,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/copy_to_baseline_resolver
+      CodeUri: ../../../040_modules/lambda/copy_to_baseline_resolver
       Description: Lambda function to copy files to baseline bucket via GraphQL API
       MemorySize: 512
       Timeout: 300
@@ -499,7 +499,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/create_document_resolver
+      CodeUri: ../../../040_modules/lambda/create_document_resolver
       Description: Lambda function to create document tracking via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -556,7 +556,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/delete_agent_chat_session_resolver/
+      CodeUri: ../../../040_modules/lambda/delete_agent_chat_session_resolver/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 60
@@ -633,7 +633,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/delete_document_resolver
+      CodeUri: ../../../040_modules/lambda/delete_document_resolver
       Description: Lambda function to delete documents via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -687,7 +687,7 @@
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.lambda_handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/delete_tests
+      CodeUri: ../../../040_modules/lambda/delete_tests
       Description: Lambda function to delete test runs via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -759,7 +759,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/discovery_upload_resolver
+      CodeUri: ../../../040_modules/lambda/discovery_upload_resolver
       Description: Lambda function to handle discovery document uploads via GraphQL API
       MemorySize: 512
       Timeout: 120
@@ -832,7 +832,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/get_agent_chat_messages_resolver/
+      CodeUri: ../../../040_modules/lambda/get_agent_chat_messages_resolver/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 60
@@ -901,7 +901,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/get_file_contents_resolver
+      CodeUri: ../../../040_modules/lambda/get_file_contents_resolver
       Description: Lambda function to return file contents via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -961,7 +961,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/get_stepfunction_execution_resolver/
+      CodeUri: ../../../040_modules/lambda/get_stepfunction_execution_resolver/
       Handler: index.lambda_handler
       Runtime: python3.12
       Architectures:
@@ -1018,7 +1018,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: ./src/lambda/ipset_updater
+      CodeUri: ../../../040_modules/lambda/ipset_updater
       Handler: index.lambda_handler
       Runtime: python3.12
       Timeout: 300
@@ -1078,7 +1078,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/list_agent_chat_sessions_resolver/
+      CodeUri: ../../../040_modules/lambda/list_agent_chat_sessions_resolver/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 60
@@ -1136,7 +1136,7 @@
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/list_available_agents/
+      CodeUri: ../../../040_modules/lambda/list_available_agents/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
@@ -1207,7 +1207,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/process_changes_resolver
+      CodeUri: ../../../040_modules/lambda/process_changes_resolver
       Description: Lambda function to process section changes via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -1283,7 +1283,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/query_knowledgebase_resolver
+      CodeUri: ../../../040_modules/lambda/query_knowledgebase_resolver
       Description: Lambda function to query Bedrock Knowledge Base via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -1383,7 +1383,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/reprocess_document_resolver
+      CodeUri: ../../../040_modules/lambda/reprocess_document_resolver
       Description: Lambda function to reprocess documents via GraphQL API
       MemorySize: 512
       Timeout: 60
@@ -1457,7 +1457,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/sync_bda_idp_resolver
+      CodeUri: ../../../040_modules/lambda/sync_bda_idp_resolver
       Timeout: 300  # 5 minutes for sync operation
       Description: Lambda function to synchronously sync BDA blueprints with IDP classes
       MemorySize: 512
@@ -1532,7 +1532,7 @@
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/test_results_resolver
+      CodeUri: ../../../040_modules/lambda/test_results_resolver
       Description: GraphQL resolver for test results queries
       MemorySize: 512
       Timeout: 300
@@ -1647,7 +1647,7 @@
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/test_runner
+      CodeUri: ../../../040_modules/lambda/test_runner
       Description: Lambda function to run test sets via GraphQL API
       MemorySize: 256
       Timeout: 300
@@ -1726,7 +1726,7 @@
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/test_set_resolver
+      CodeUri: ../../../040_modules/lambda/test_set_resolver
       Description: GraphQL resolver for test set mutations
       MemorySize: 256
       Timeout: 60
@@ -1800,7 +1800,7 @@
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/upload_resolver
+      CodeUri: ../../../040_modules/lambda/upload_resolver
       Description: Lambda function to return signed upload URL via GraphQL API
       MemorySize: 512
       Timeout: 60

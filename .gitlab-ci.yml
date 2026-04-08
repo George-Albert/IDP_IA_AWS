@@ -50,7 +50,7 @@ developer_tests:
     # Install dependencies needed by publish.py for test imports
     - uv pip install typer rich boto3
     # Install test dependencies
-    - cd lib/idp_common_pkg && uv pip install -e ".[test,evaluation]" && cd ../..
+    - cd 020_shared/idp-packages/idp_common_pkg && uv pip install -e ".[test,evaluation]" && cd ../..
 
   script:
     - make lint-cicd
@@ -60,17 +60,17 @@ developer_tests:
     - echo "===================================="
     - echo ""
     - make typecheck-pr TARGET_BRANCH=$TARGET_BRANCH
-    - make test-cicd -C lib/idp_common_pkg
+    - make test-cicd -C 020_shared/idp-packages/idp_common_pkg
 
   artifacts:
     paths:
-      - lib/idp_common_pkg/test-reports/coverage.xml
-      - lib/idp_common_pkg/test-reports/test-results.xml
+      - 020_shared/idp-packages/idp_common_pkg/test-reports/coverage.xml
+      - 020_shared/idp-packages/idp_common_pkg/test-reports/test-results.xml
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: lib/idp_common_pkg/test-reports/coverage.xml
-      junit: lib/idp_common_pkg/test-reports/test-results.xml
+        path: 020_shared/idp-packages/idp_common_pkg/test-reports/coverage.xml
+      junit: 020_shared/idp-packages/idp_common_pkg/test-reports/test-results.xml
     expire_in: 1 week
 
 deployment_validation:
@@ -90,7 +90,7 @@ deployment_validation:
 
   script:
     # Check if service role has sufficient permissions for main stack deployment
-    - python3 scripts/sdlc/validate_service_role_permissions.py
+    - python3 090_scripts/maintenance/sdlc/validate_service_role_permissions.py
 
 integration_tests:
   stage: integration_tests

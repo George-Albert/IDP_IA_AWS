@@ -822,7 +822,7 @@ Resources:
     # checkov:skip=CKV_AWS_173: "Environment variables do not contain sensitive data - only configuration values like feature flags and non-sensitive settings"
     Properties:
       FunctionName: !Sub "${AWS::StackName}-agentcore-mcp-handler"
-      CodeUri: src/lambda/agentcore_mcp_handler/
+      CodeUri: ../040_modules/lambda/agentcore_mcp_handler/
       Handler: index.lambda_handler
       Runtime: python3.12
       MemorySize: 1024
@@ -1068,7 +1068,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/agentcore_gateway_manager/
+      CodeUri: ../040_modules/lambda/agentcore_gateway_manager/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 900
@@ -1187,7 +1187,7 @@ Resources:
       Handler: index.handler
       Runtime: python3.12
       Timeout: 10
-      CodeUri: src/lambda/read_previous_idp_pattern
+      CodeUri: ../040_modules/lambda/read_previous_idp_pattern
       Environment:
         Variables:
           LOG_LEVEL: INFO
@@ -2003,7 +2003,7 @@ Resources:
           !Ref AWS::NoValue,
         ]
       FunctionName: !Sub "${AWS::StackName}-FccDatasetDeployer"
-      CodeUri: src/lambda/fcc_dataset_deployer/
+      CodeUri: ../040_modules/lambda/fcc_dataset_deployer/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 900
@@ -2073,7 +2073,7 @@ Resources:
           !Ref AWS::NoValue,
         ]
       FunctionName: !Sub "${AWS::StackName}-OcrBenchmarkDeployer"
-      CodeUri: src/lambda/ocr_benchmark_deployer/
+      CodeUri: ../040_modules/lambda/ocr_benchmark_deployer/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 900
@@ -2143,7 +2143,7 @@ Resources:
           !Ref AWS::NoValue,
         ]
       FunctionName: !Sub "${AWS::StackName}-RvlCdipNmpDeployer"
-      CodeUri: src/lambda/docsplit_testset_deployer/
+      CodeUri: ../040_modules/lambda/docsplit_testset_deployer/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 900
@@ -2215,7 +2215,7 @@ Resources:
           !Ref AWS::NoValue,
         ]
       FunctionName: !Sub "${AWS::StackName}-W2DatasetDeployer"
-      CodeUri: src/lambda/w2_dataset_deployer/
+      CodeUri: ../040_modules/lambda/w2_dataset_deployer/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 900
@@ -3120,7 +3120,7 @@ Resources:
         !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.lambda_handler
       Runtime: python3.12
-      CodeUri: src/lambda/backfill_gsi_attributes/
+      CodeUri: ../040_modules/lambda/backfill_gsi_attributes/
       Timeout: 900
       MemorySize: 512
       Environment:
@@ -3166,7 +3166,7 @@ Resources:
     Type: AWS::Serverless::StateMachine
     Properties:
       Name: !Sub "${AWS::StackName}-GSIBackfill"
-      DefinitionUri: src/lambda/backfill_gsi_attributes/statemachine.asl.json
+      DefinitionUri: ../040_modules/lambda/backfill_gsi_attributes/statemachine.asl.json
       DefinitionSubstitutions:
         BackfillWorkerFunctionArn: !GetAtt BackfillWorkerFunction.Arn
       Role: !GetAtt BackfillStateMachineRole.Arn
@@ -3195,7 +3195,7 @@ Resources:
         !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: src/lambda/backfill_gsi_attributes/
+      CodeUri: ../040_modules/lambda/backfill_gsi_attributes/
       Timeout: 60
       MemorySize: 256
       Environment:
@@ -3274,7 +3274,7 @@ Resources:
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
-      CodeUri: src/lambda/initialize_counter
+      CodeUri: ../040_modules/lambda/initialize_counter
       Environment:
         Variables:
           LOG_LEVEL: !Ref LogLevel
@@ -3394,7 +3394,7 @@ Resources:
 
       Layers:
         - !Ref IDPCommonBaseLayer
-      CodeUri: src/lambda/update_configuration
+      CodeUri: ../040_modules/lambda/update_configuration
       Environment:
         Variables:
           LOG_LEVEL: !Ref LogLevel
@@ -3499,7 +3499,7 @@ Resources:
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
-      CodeUri: src/lambda/update_settings
+      CodeUri: ../040_modules/lambda/update_settings
       LoggingConfig:
         LogGroup: !Ref UpdateSettingsFunctionLogGroup
       Policies:
@@ -3665,7 +3665,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/queue_sender/
+      CodeUri: ../040_modules/lambda/queue_sender/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
@@ -3747,7 +3747,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/queue_processor/
+      CodeUri: ../040_modules/lambda/queue_processor/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
@@ -3863,7 +3863,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/workflow_tracker/
+      CodeUri: ../040_modules/lambda/workflow_tracker/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
@@ -4009,7 +4009,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/post_processing_decompressor/
+      CodeUri: ../040_modules/lambda/post_processing_decompressor/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 300
@@ -4108,7 +4108,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/save_reporting_data/
+      CodeUri: ../040_modules/lambda/save_reporting_data/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 300
@@ -4599,7 +4599,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/dashboard_merger
+      CodeUri: ../040_modules/lambda/dashboard_merger
       Handler: index.handler
       Runtime: python3.12
       Timeout: 60
@@ -4652,7 +4652,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/lookup_function/
+      CodeUri: ../040_modules/lambda/lookup_function/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 30
@@ -4785,7 +4785,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/agent_chat_processor/
+      CodeUri: ../040_modules/lambda/agent_chat_processor/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 600 # Increase timeout to handle longer Bedrock responses
@@ -5091,7 +5091,7 @@ Resources:
       Runtime: python3.12
       Timeout: 300
       MemorySize: 512
-      CodeUri: src/lambda/calculate_capacity
+      CodeUri: ../040_modules/lambda/calculate_capacity
       LoggingConfig:
         LogGroup: !Ref CalculateCapacityFunctionLogGroup
       Environment:
@@ -5169,7 +5169,7 @@ Resources:
       Handler: index.lambda_handler
       Runtime: python3.12
       Timeout: 60
-      CodeUri: src/lambda/calculate_capacity_resolver
+      CodeUri: ../040_modules/lambda/calculate_capacity_resolver
       LoggingConfig:
         LogGroup: !Ref CalculateCapacityResolverFunctionLogGroup
       Environment:
@@ -5243,7 +5243,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/agent_processor/
+      CodeUri: ../040_modules/lambda/agent_processor/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 900
@@ -5951,7 +5951,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: ./src/lambda/ipset_updater
+      CodeUri: ../040_modules/lambda/ipset_updater
       Handler: index.lambda_handler
       Runtime: python3.12
       Timeout: 300
@@ -6161,7 +6161,7 @@ Resources:
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/test_set_file_copier
+      CodeUri: ../040_modules/lambda/test_set_file_copier
       Description: Lambda function to copy test set files from SQS queue
       MemorySize: 1024
       Timeout: 900
@@ -6241,7 +6241,7 @@ Resources:
           !Ref PermissionsBoundaryArn,
           !Ref AWS::NoValue,
         ]
-      CodeUri: src/lambda/test_set_zip_extractor/
+      CodeUri: ../040_modules/lambda/test_set_zip_extractor/
       Handler: index.handler
       Runtime: python3.12
       Timeout: 300
@@ -6428,7 +6428,7 @@ Resources:
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/test_file_copier
+      CodeUri: ../040_modules/lambda/test_file_copier
       Description: Lambda function to copy test files from SQS queue
       MemorySize: 1024
       Timeout: 900
@@ -6516,7 +6516,7 @@ Resources:
         ]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/discovery_processor
+      CodeUri: ../040_modules/lambda/discovery_processor
       Description: Lambda function to process discovery jobs from SQS queue
       MemorySize: 1024
       Timeout: 900
@@ -6613,7 +6613,7 @@ Resources:
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: prepare_handler.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/multi_doc_discovery
+      CodeUri: ../040_modules/lambda/multi_doc_discovery
       Description: Multi-doc discovery - prepare and list documents
       MemorySize: 512
       Timeout: 300
@@ -6718,7 +6718,7 @@ Resources:
     Type: AWS::Serverless::StateMachine
     Properties:
       Name: !Sub "${AWS::StackName}-MultiDocDiscovery"
-      DefinitionUri: src/lambda/multi_doc_discovery/statemachine.asl.json
+      DefinitionUri: ../040_modules/lambda/multi_doc_discovery/statemachine.asl.json
       DefinitionSubstitutions:
         DiscoveryTrackingTable: !Ref DiscoveryTrackingTable
         PrepareFunction: !GetAtt MultiDocDiscoveryPrepareFunction.Arn
@@ -6759,7 +6759,7 @@ Resources:
       FunctionName: !Sub "${AWS::StackName}-blueprint-optimization"
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: src/lambda/blueprint_optimization/
+      CodeUri: ../040_modules/lambda/blueprint_optimization/
       Description: Lambda function to optimize BDA blueprints using ground truth data
       MemorySize: 3008
       Timeout: 900
@@ -7205,7 +7205,7 @@ Resources:
       Timeout: 60
       MemorySize: 128
       Handler: index.handler
-      CodeUri: src/lambda/start_codebuild
+      CodeUri: ../040_modules/lambda/start_codebuild
       Description: This AWS Lambda Function kicks off a code build job.
       LoggingConfig:
         LogGroup: !Ref StartUICodeBuildLogGroup
@@ -7253,7 +7253,7 @@ Resources:
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/user_management
+      CodeUri: ../040_modules/lambda/user_management
       Description: Lambda function for user management (create, delete, list users)
       MemorySize: 256
       Timeout: 30
@@ -7313,7 +7313,7 @@ Resources:
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/user_sync
+      CodeUri: ../040_modules/lambda/user_sync
       Description: Lambda function to sync DynamoDB user changes to Cognito
       MemorySize: 256
       Timeout: 30
@@ -7365,7 +7365,7 @@ Resources:
       PermissionsBoundary: !If [HasPermissionsBoundary, !Ref PermissionsBoundaryArn, !Ref AWS::NoValue]
       Handler: index.handler
       Runtime: python3.12
-      CodeUri: ./src/lambda/complete_section_review
+      CodeUri: ../040_modules/lambda/complete_section_review
       Description: Lambda function to mark HITL section review as complete
       MemorySize: 512
       Timeout: 60

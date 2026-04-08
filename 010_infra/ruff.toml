@@ -1,13 +1,13 @@
 # Let's exclude some whole directories until we are ready to format them individually
 extend-exclude = [
-    "lib/appsync_helper_pkg",
-    "lib/get_config_pkg",
-    "lib/idp_common_pkg/idp_common/bedrock",
-    "lib/idp_common_pkg/idp_common/config",
-    "lib/idp_common_pkg/idp_common/image",
-    "lib/idp_common_pkg/idp_common/metrics",
-    "lib/idp_common_pkg/idp_common/s3",
-    "lib/idp_common_pkg/idp_common/utils",
+    "020_shared/idp-packages/appsync_helper_pkg",
+    "020_shared/idp-packages/get_config_pkg",
+    "020_shared/idp-packages/idp_common_pkg/idp_common/bedrock",
+    "020_shared/idp-packages/idp_common_pkg/idp_common/config",
+    "020_shared/idp-packages/idp_common_pkg/idp_common/image",
+    "020_shared/idp-packages/idp_common_pkg/idp_common/metrics",
+    "020_shared/idp-packages/idp_common_pkg/idp_common/s3",
+    "020_shared/idp-packages/idp_common_pkg/idp_common/utils",
     "notebooks",
     "options",
     "patterns",
@@ -76,12 +76,12 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 # Let's ignore some annoying rules in notebooks
 "notebooks/*" = ["F401"]
 # Internal SDK implementation files are allowed to import from _core
-"lib/idp_sdk/idp_sdk/**" = ["TID251"]
+"020_shared/idp-packages/idp_sdk/idp_sdk/**" = ["TID251"]
 # Lambda tools that need direct _core access
-"src/lambda/**" = ["TID251"]
+"040_modules/lambda/**" = ["TID251"]
 # Tests mock _core internals directly
-"lib/idp_cli_pkg/tests/**" = ["TID251"]
-"lib/idp_sdk/tests/**" = ["TID251"]
+"020_shared/idp-packages/idp_cli_pkg/tests/**" = ["TID251"]
+"020_shared/idp-packages/idp_sdk/tests/**" = ["TID251"]
 
 [format]
 # Like Black, use double quotes for strings.

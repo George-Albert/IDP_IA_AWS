@@ -1,8 +1,8 @@
 {
   "include": [
-    "lib/idp_common_pkg/idp_common",
-    "idp_cli/idp_cli",
-    "src/lambda"
+    "020_shared/idp-packages/idp_common_pkg/idp_common",
+    "020_shared/idp-packages/idp_cli_pkg/idp_cli",
+    "040_modules/lambda"
   ],
   
   "exclude": [
@@ -14,7 +14,7 @@
     "**/dist",
     "**/cdk.out",
     "notebooks",
-    "patterns/*/src",
+    "040_modules/unified-pattern-lambdas",
     "options/*/src"
   ],
   

@@ -16,7 +16,7 @@ import pytest
 FUNCTION_PATH = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
-        "../../../../patterns/unified/src/test_execution_aggregation_function",
+        "../../../../040_modules/unified-pattern-lambdas/test_execution_aggregation_function",
     )
 )
 

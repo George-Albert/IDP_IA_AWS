@@ -122,16 +122,16 @@ class IDPPublisher:
         """Find all requirements.txt files in the project"""
         requirements_files = []
 
-        # Main Lambda functions
-        src_lambda_dir = Path("src/lambda")
+        # Main Lambda functions (moved to 040_modules/lambda)
+        src_lambda_dir = Path("040_modules/lambda")
         if src_lambda_dir.exists():
             for func_dir in src_lambda_dir.iterdir():
                 req_file = func_dir / "requirements.txt"
                 if req_file.exists():
                     requirements_files.append(str(req_file))
 
-        # Nested Lambda functions
-        nested_dir = Path("nested")
+        # Nested Lambda functions (moved to 010_infra/nested)
+        nested_dir = Path("010_infra/nested")
         if nested_dir.exists():
             for nested_item in nested_dir.iterdir():
                 nested_src = nested_item / "src"
@@ -141,16 +141,13 @@ class IDPPublisher:
                         if req_file.exists():
                             requirements_files.append(str(req_file))
 
-        # Pattern Lambda functions
-        patterns_dir = Path("patterns")
+        # Pattern Lambda functions (moved to 040_modules/unified-pattern-lambdas)
+        patterns_dir = Path("040_modules/unified-pattern-lambdas")
         if patterns_dir.exists():
-            for pattern_dir in patterns_dir.iterdir():
-                pattern_src = pattern_dir / "src"
-                if pattern_src.exists():
-                    for func_dir in pattern_src.iterdir():
-                        req_file = func_dir / "requirements.txt"
-                        if req_file.exists():
-                            requirements_files.append(str(req_file))
+            for func_dir in patterns_dir.iterdir():
+                req_file = func_dir / "requirements.txt"
+                if req_file.exists():
+                    requirements_files.append(str(req_file))
 
         return requirements_files
 
@@ -1277,7 +1274,7 @@ STDERR:
         """Package multi-doc discovery source code for CodeBuild to build Docker image.
 
         CodeBuild downloads this zip and uses the inline buildspec to create a Docker
-        image containing lib/idp_common_pkg and src/lambda/multi_doc_discovery/*.py.
+        image containing 020_shared/idp-packages/idp_common_pkg and 040_modules/lambda/multi_doc_discovery/*.py.
         """
         self.console.print(
             "[bold cyan]📦 Packaging multi-doc discovery source for Docker builds[/bold cyan]"
@@ -1314,8 +1311,8 @@ STDERR:
                     arcname = os.path.relpath(file_path, ".")
                     zipf.write(file_path, arcname)
 
-            # Add src/lambda/multi_doc_discovery/*.py
-            for root, dirs, files in os.walk("src/lambda/multi_doc_discovery"):
+            # Add 040_modules/lambda/multi_doc_discovery/*.py
+            for root, dirs, files in os.walk("040_modules/lambda/multi_doc_discovery"):
                 dirs[:] = [d for d in dirs if d not in {"__pycache__", ".pytest_cache"}]
                 for file in files:
                     if file.endswith((".pyc", ".pyo")):
@@ -1473,9 +1470,9 @@ STDERR:
                 ).replace(".zip", "")
 
                 # Get various hashes
-                workforce_url_file = "src/lambda/get-workforce-url/index.py"
-                a2i_resources_file = "src/lambda/create_a2i_resources/index.py"
-                cognito_client_file = "src/lambda/cognito_updater_hitl/index.py"
+                workforce_url_file = "040_modules/lambda/get-workforce-url/index.py"
+                a2i_resources_file = "040_modules/lambda/create_a2i_resources/index.py"
+                cognito_client_file = "040_modules/lambda/cognito_updater_hitl/index.py"
 
                 workforce_url_hash = (
                     self.get_file_checksum(workforce_url_file)[:16]
@@ -1524,7 +1521,7 @@ STDERR:
                     ).get("zip_name", "idp-common-multi_document_discovery.zip"),
                     "<HASH_TOKEN>": self.get_directory_checksum("./lib")[:16],
                     "<LAMBDA_HASH_TOKEN>": self.get_directory_checksum(
-                        "./src/lambda/agentcore_gateway_manager"
+                        "./040_modules/lambda/agentcore_gateway_manager"
                     )[:16],
                     # Include config_library + config processing code (Lambda, models, system defaults)
                     # This ensures UpdateConfiguration custom resource re-runs when processing logic changes
@@ -1532,7 +1529,7 @@ STDERR:
                         (
                             self.get_directory_checksum("config_library")
                             + self.get_directory_checksum(
-                                "src/lambda/update_configuration"
+                                "040_modules/lambda/update_configuration"
                             )
                             + self.get_directory_checksum(
                                 "lib/idp_common_pkg/idp_common/config"
@@ -1544,19 +1541,19 @@ STDERR:
                     "<A2I_RESOURCES_HASH_TOKEN>": a2i_resources_hash,
                     "<COGNITO_CLIENT_HASH_TOKEN>": cognito_client_hash,
                     "<FCC_DATASET_DEPLOYER_HASH_TOKEN>": self.get_directory_checksum(
-                        "src/lambda/fcc_dataset_deployer"
+                        "040_modules/lambda/fcc_dataset_deployer"
                     )[:16],
                     "<OCR_BENCHMARK_DEPLOYER_HASH_TOKEN>": self.get_directory_checksum(
-                        "src/lambda/ocr_benchmark_deployer"
+                        "040_modules/lambda/ocr_benchmark_deployer"
                     )[:16],
                     "<docsplit_testset_deployer_HASH_TOKEN>": self.get_directory_checksum(
-                        "src/lambda/docsplit_testset_deployer"
+                        "040_modules/lambda/docsplit_testset_deployer"
                     )[:16],
                     "<w2_dataset_deployer_HASH_TOKEN>": self.get_directory_checksum(
-                        "src/lambda/w2_dataset_deployer"
+                        "040_modules/lambda/w2_dataset_deployer"
                     )[:16],
                     "<MULTI_DOC_DISCOVERY_BUILD_HASH_TOKEN>": self.get_directory_checksum(
-                        "src/lambda/multi_doc_discovery"
+                        "040_modules/lambda/multi_doc_discovery"
                     )[:16],
                 }
 
@@ -1867,7 +1864,7 @@ STDERR:
                 LIB_DEPENDENCY,
                 "nested/multi-doc-discovery/docker_build_lambda",
                 "nested/multi-doc-discovery/template.yaml",
-                "src/lambda/multi_doc_discovery",
+                "040_modules/lambda/multi_doc_discovery",
             ],
             # Unified pattern (combines BDA + Pipeline)
             "patterns/unified": [

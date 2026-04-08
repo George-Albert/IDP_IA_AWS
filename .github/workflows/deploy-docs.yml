@@ -6,7 +6,7 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'docs/**'
+      - '001_docs/**'
       - 'docs-site/**'
       - 'images/**'
   workflow_dispatch: # Allow manual trigger
@@ -43,10 +43,10 @@ jobs:
         run: |
           # Create symlinks for doc content (same as setup.sh but with correct paths)
           mkdir -p src/content/docs
-          for md_file in ../docs/*.md; do
+          for md_file in ../001_docs/*.md; do
             filename=$(basename "$md_file")
             [ "$filename" = "README.md" ] && continue
-            ln -sf "../../../../docs/$filename" "src/content/docs/$filename"
+            ln -sf "../../../../001_docs/$filename" "src/content/docs/$filename"
           done
 
           # Symlink images for relative path resolution

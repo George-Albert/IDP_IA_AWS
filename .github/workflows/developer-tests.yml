@@ -67,7 +67,7 @@ jobs:
         run: |
           uv pip install ruff
           uv pip install typer rich boto3
-          cd lib/idp_common_pkg && uv pip install -e ".[test]" && cd ../..
+          cd 020_shared/idp-packages/idp_common_pkg && uv pip install -e ".[test]" && cd ../../../..
 
       - name: Run linting checks
         run: make lint-cicd
@@ -85,7 +85,7 @@ jobs:
 
       - name: Run tests
         id: run-tests
-        run: make test-cicd -C lib/idp_common_pkg
+        run: make test-cicd -C 020_shared/idp-packages/idp_common_pkg
         continue-on-error: false
 
       - name: Upload coverage reports
@@ -94,23 +94,23 @@ jobs:
         with:
           name: test-reports
           path: |
-            lib/idp_common_pkg/test-reports/coverage.xml
-            lib/idp_common_pkg/test-reports/test-results.xml
+            020_shared/idp-packages/idp_common_pkg/test-reports/coverage.xml
+            020_shared/idp-packages/idp_common_pkg/test-reports/test-results.xml
           retention-days: 7
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@c950f6fb443cb5af20a377fd0dfaa78838901040  # v2.23.0
-        if: always() && hashFiles('lib/idp_common_pkg/test-reports/test-results.xml') != ''
+        if: always() && hashFiles('020_shared/idp-packages/idp_common_pkg/test-reports/test-results.xml') != ''
         with:
-          files: lib/idp_common_pkg/test-reports/test-results.xml
+          files: 020_shared/idp-packages/idp_common_pkg/test-reports/test-results.xml
           check_name: Test Results
           comment_mode: off  # Disable PR comments to avoid permission issues on fork PRs
 
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95  # v1.3.0
-        if: always() && hashFiles('lib/idp_common_pkg/test-reports/coverage.xml') != ''
+        if: always() && hashFiles('020_shared/idp-packages/idp_common_pkg/test-reports/coverage.xml') != ''
         with:
-          filename: lib/idp_common_pkg/test-reports/coverage.xml
+          filename: 020_shared/idp-packages/idp_common_pkg/test-reports/coverage.xml
           badge: true
           fail_below_min: false
           format: markdown

@@ -13,7 +13,7 @@ import pytest
 # Import the mlflow_logger module using importlib to avoid mlflow dependency
 _module_path = os.path.join(
     os.path.dirname(__file__),
-    "../../../../patterns/unified/src/mlflow_logger_function/index.py",
+    "../../../../040_modules/unified-pattern-lambdas/mlflow_logger_function/index.py",
 )
 
 # Mock mlflow before importing the module
