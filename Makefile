@@ -54,15 +54,15 @@ setup: ## Install all packages into current Python environment (no venv)
 	echo "Upgrading pip..."; \
 	$$SETUP_PIP install --upgrade pip && \
 	echo "Installing idp_common package with all dependencies (including test)..." && \
-	$$SETUP_PIP install -e "lib/idp_common_pkg[all,dev,test]" && \
+	$$SETUP_PIP install -e "020_shared/idp-packages/idp_common_pkg[all,dev,test]" && \
 	echo "Installing idp-cli package..." && \
-	$$SETUP_PIP install -e lib/idp_cli_pkg && \
+	$$SETUP_PIP install -e 020_shared/idp-packages/idp_cli_pkg && \
 	echo "Installing idp_sdk package..." && \
-	$$SETUP_PIP install -e lib/idp_sdk && \
+	$$SETUP_PIP install -e 020_shared/idp-packages/idp_sdk && \
 	echo "Installing idp_mcp_connector package..." && \
-	$$SETUP_PIP install -e lib/idp_mcp_connector_pkg && \
+	$$SETUP_PIP install -e 020_shared/idp-packages/idp_mcp_connector_pkg && \
 	echo "Installing capacity planning test dependencies..." && \
-	$$SETUP_PIP install -r src/lambda/calculate_capacity/requirements-test.txt && \
+	$$SETUP_PIP install -r 040_modules/lambda/calculate_capacity/requirements-test.txt && \
 	echo "Installing cfn-lint for CloudFormation template validation..." && \
 	$$SETUP_PIP install cfn-lint && \
 	echo "" && \
@@ -83,15 +83,15 @@ setup-venv: ## Create .venv and install all packages into it
 	@echo "Upgrading pip..."
 	$(VENV_DIR)/bin/pip install --upgrade pip
 	@echo "Installing idp_common package with all dependencies (including test)..."
-	$(VENV_DIR)/bin/pip install -e "lib/idp_common_pkg[all,dev,test]"
+	$(VENV_DIR)/bin/pip install -e "020_shared/idp-packages/idp_common_pkg[all,dev,test]"
 	@echo "Installing idp-cli package..."
-	$(VENV_DIR)/bin/pip install -e lib/idp_cli_pkg
+	$(VENV_DIR)/bin/pip install -e 020_shared/idp-packages/idp_cli_pkg
 	@echo "Installing idp_sdk package..."
-	$(VENV_DIR)/bin/pip install -e lib/idp_sdk
+	$(VENV_DIR)/bin/pip install -e 020_shared/idp-packages/idp_sdk
 	@echo "Installing idp_mcp_connector package..."
-	$(VENV_DIR)/bin/pip install -e lib/idp_mcp_connector_pkg
+	$(VENV_DIR)/bin/pip install -e 020_shared/idp-packages/idp_mcp_connector_pkg
 	@echo "Installing capacity planning test dependencies..."
-	$(VENV_DIR)/bin/pip install -r src/lambda/calculate_capacity/requirements-test.txt
+	$(VENV_DIR)/bin/pip install -r 040_modules/lambda/calculate_capacity/requirements-test.txt
 	@echo "Installing cfn-lint for CloudFormation template validation..."
 	$(VENV_DIR)/bin/pip install cfn-lint
 	@echo ""
@@ -123,7 +123,7 @@ lint-cicd: ## CI/CD lint — checks only, no modifications
 		exit 1; \
 	fi; \
 	echo "All checks passed!"
-	@echo "Frontend checks"
+	@echo "UI checks"
 	@if ! make ui-lint; then \
 		echo -e "$(RED)ERROR: UI lint failed$(NC)"; \
 		exit 1; \
@@ -143,14 +143,14 @@ lint-cicd: ## CI/CD lint — checks only, no modifications
 
 validate-buildspec: ## Validate AWS CodeBuild buildspec files
 	@echo "Validating buildspec files..."
-	@$(PYTHON) scripts/sdlc/validate_buildspec.py patterns/*/buildspec.yml || \
+	@$(PYTHON) 090_scripts/maintenance/sdlc/validate_buildspec.py 010_infra/pattern-unified-buildspec*.yml || \
 		(echo -e "$(RED)ERROR: Buildspec validation failed!$(NC)" && exit 1)
 	@echo -e "$(GREEN)✅ All buildspec files are valid!$(NC)"
 
 check-arn-partitions: ## Check CloudFormation templates for hardcoded ARN partitions
 	@echo "Checking CloudFormation templates for hardcoded ARN partitions and service principals..."
 	@FOUND_ISSUES=0; \
-	for template in template.yaml patterns/*/template.yaml patterns/*/sagemaker_classifier_endpoint.yaml options/*/template.yaml; do \
+	for template in 010_infra/template.yaml 010_infra/pattern-unified-template.yaml; do \
 		if [ -f "$$template" ]; then \
 			echo "Checking $$template..."; \
 			ARN_MATCHES=$$(grep -n "arn:aws:" "$$template" | grep -v "arn:\$${AWS::Partition}:" || true); \
@@ -190,35 +190,35 @@ typecheck-stats: ## Type checks with detailed statistics
 TARGET_BRANCH ?= main
 typecheck-pr: ## Type check only files changed vs TARGET_BRANCH (default: main)
 	@echo "Type checking changed files against $(TARGET_BRANCH)..."
-	$(PYTHON) scripts/sdlc/typecheck_pr_changes.py $(TARGET_BRANCH)
+	$(PYTHON) 090_scripts/maintenance/sdlc/typecheck_pr_changes.py $(TARGET_BRANCH)
 
 ##@ Testing
 test: ## Run all tests (idp_common, cli, sdk, capacity, config library)
-	$(MAKE) -C lib/idp_common_pkg test PYTHON=$(PYTHON)
-	cd lib/idp_cli_pkg && $(PYTHON) -m pytest -v
-	cd lib/idp_sdk && $(PYTHON) -m pytest -m "not integration" -v
+	$(MAKE) -C 020_shared/idp-packages/idp_common_pkg test PYTHON=$(PYTHON)
+	cd 020_shared/idp-packages/idp_cli_pkg && $(PYTHON) -m pytest -v
+	cd 020_shared/idp-packages/idp_sdk && $(PYTHON) -m pytest -m "not integration" -v
 	@echo "Running capacity planning Lambda tests..."
-	cd src/lambda/calculate_capacity && $(PYTHON) -m pytest -v
+	cd 040_modules/lambda/calculate_capacity && $(PYTHON) -m pytest -v
 	@echo "Validating config library files..."
-	$(PYTHON) -m pytest config_library/test_config_library.py -v
+	$(PYTHON) -m pytest 050_configs/config-library/test_config_library.py -v
 
 test-cli: ## Run only IDP CLI tests
 	@echo "Running IDP CLI tests..."
-	cd lib/idp_cli_pkg && $(PYTHON) -m pytest -v
+	cd 020_shared/idp-packages/idp_cli_pkg && $(PYTHON) -m pytest -v
 	@echo -e "$(GREEN)✅ All CLI tests passed!$(NC)"
 
 test-config-library: ## Run only config library validation tests
 	@echo "Validating config library YAML/JSON files..."
-	$(PYTHON) -m pytest config_library/test_config_library.py -v
+	$(PYTHON) -m pytest 050_configs/config-library/test_config_library.py -v
 
 test-capacity: ## Run only capacity planning tests
 	@echo "Running capacity planning Lambda tests..."
-	cd src/lambda/calculate_capacity && $(PYTHON) -m pytest -v
+	cd 040_modules/lambda/calculate_capacity && $(PYTHON) -m pytest -v
 
 test-capacity-coverage: ## Run capacity planning tests with coverage report
 	@echo "Running capacity planning Lambda tests with coverage..."
-	cd src/lambda/calculate_capacity && $(PYTHON) -m pytest --cov=. --cov-report=term --cov-report=html -v
-	@echo -e "$(GREEN)✅ Coverage report generated at src/lambda/calculate_capacity/htmlcov/index.html$(NC)"
+	cd 040_modules/lambda/calculate_capacity && $(PYTHON) -m pytest --cov=. --cov-report=term --cov-report=html -v
+	@echo -e "$(GREEN)✅ Coverage report generated at 040_modules/lambda/calculate_capacity/htmlcov/index.html$(NC)"
 
 ##@ UI Development
 # Usage: make ui-start STACK_NAME=<stack-name>
@@ -237,27 +237,27 @@ endif
 			echo -e "$(YELLOW)Make sure the stack exists and has completed deployment.$(NC)"; \
 			exit 1; \
 		fi; \
-		echo "$$ENV_CONTENT" > src/ui/.env; \
-		echo -e "$(GREEN)✅ Created src/ui/.env from stack outputs$(NC)"; \
+		echo "$$ENV_CONTENT" > 060_apps/web-ui/.env; \
+		echo -e "$(GREEN)✅ Created 060_apps/web-ui/.env from stack outputs$(NC)"; \
 	fi
-	@if [ ! -f src/ui/.env ]; then \
-		echo -e "$(RED)ERROR: src/ui/.env not found$(NC)"; \
+	@if [ ! -f 060_apps/web-ui/.env ]; then \
+		echo -e "$(RED)ERROR: 060_apps/web-ui/.env not found$(NC)"; \
 		echo -e "$(YELLOW)Either provide STACK_NAME to auto-generate, or create .env manually.$(NC)"; \
 		echo -e "$(YELLOW)Usage: make ui-start STACK_NAME=<your-stack-name>$(NC)"; \
 		exit 1; \
 	fi
 	@echo "Installing UI dependencies..."
-	cd src/ui && npm ci --prefer-offline --no-audit
+	cd 060_apps/web-ui && npm ci --prefer-offline --no-audit
 	@echo "Starting UI development server..."
-	cd src/ui && npm run start
+	cd 060_apps/web-ui && npm run start
 
 ui-lint: ## Run UI linting with checksum caching (skips if unchanged)
 	@echo "Checking if UI lint is needed..."
-	@CURRENT_HASH=$$($(PYTHON) -c "from publish import IDPPublisher; p = IDPPublisher(); print(p.get_directory_checksum('src/ui'))"); \
-	STORED_HASH=$$(test -f src/ui/.checksum && cat src/ui/.checksum || echo ""); \
+	@CURRENT_HASH=$$($(PYTHON) -c "from publish import IDPPublisher; p = IDPPublisher(); print(p.get_directory_checksum('060_apps/web-ui'))"); \
+	STORED_HASH=$$(test -f 060_apps/web-ui/.checksum && cat 060_apps/web-ui/.checksum || echo ""); \
 	if [ "$$CURRENT_HASH" != "$$STORED_HASH" ]; then \
 		echo "UI code checksum changed - running lint..."; \
-		cd src/ui && npm ci --prefer-offline --no-audit && npm run lint -- --fix && npm run typecheck || exit 1; \
+		cd 060_apps/web-ui && npm ci --prefer-offline --no-audit && npm run lint -- --fix && npm run typecheck || exit 1; \
 		echo "$$CURRENT_HASH" > .checksum; \
 		echo -e "$(GREEN)✅ UI lint and typecheck completed and checksum updated$(NC)"; \
 	else \
@@ -266,25 +266,25 @@ ui-lint: ## Run UI linting with checksum caching (skips if unchanged)
 
 ui-build: ## Build UI for production
 	@echo "Checking UI build"
-	cd src/ui && npm ci --prefer-offline --no-audit && npm run build
+	cd 060_apps/web-ui && npm ci --prefer-offline --no-audit && npm run build
 
 ##@ Code Generation
 codegen: ## Regenerate GraphQL types and operations
-	@cd src/ui && npm run codegen
+	@cd 060_apps/web-ui && npm run codegen
 	@echo -e "$(GREEN)✅ GraphQL types regenerated. Don't forget to commit the changes.$(NC)"
 
 codegen-check: ## Verify GraphQL codegen output is up-to-date
 	@echo "Checking if GraphQL codegen output is up-to-date..."
-	@cd src/ui && npm ci --prefer-offline --no-audit && npm run codegen
-	@if ! git diff --quiet src/ui/src/graphql/generated/; then \
+	@cd 060_apps/web-ui && npm ci --prefer-offline --no-audit && npm run codegen
+	@if ! git diff --quiet 060_apps/web-ui/src/graphql/generated/; then \
 		if [ -n "$$CI" ] || [ -n "$$GITHUB_ACTIONS" ]; then \
 			echo -e "$(RED)ERROR: Generated GraphQL files are out of date!$(NC)"; \
 			echo -e "$(YELLOW)Run 'make codegen' and commit the updated files.$(NC)"; \
-			git --no-pager diff --stat src/ui/src/graphql/generated/; \
+		git --no-pager diff --stat 060_apps/web-ui/src/graphql/generated/;
 			exit 1; \
 		else \
 			echo -e "$(YELLOW)Generated GraphQL files were out of date — auto-updated.$(NC)"; \
-			git --no-pager diff --stat src/ui/src/graphql/generated/; \
+			git --no-pager diff --stat 060_apps/web-ui/src/graphql/generated/; \
 			echo -e "$(YELLOW)Please commit the changes above.$(NC)"; \
 		fi \
 	else \
@@ -293,14 +293,14 @@ codegen-check: ## Verify GraphQL codegen output is up-to-date
 
 classes-from-bda: ## Generate standard class catalog from BDA blueprints
 	@echo "Generating standard class catalog from BDA standard blueprints..."
-	$(PYTHON) scripts/generate_standard_classes.py --region us-east-1 --output src/ui/src/data/standard-classes.json
-	@echo -e "$(GREEN)✅ Standard class catalog updated! Review changes in src/ui/src/data/standard-classes.json$(NC)"
+		$(PYTHON) 090_scripts/maintenance/generate_standard_classes.py --region us-east-1 --output 060_apps/web-ui/src/data/standard-classes.json
+	@echo -e "$(GREEN)✅ Standard class catalog updated! Review changes in 060_apps/web-ui/src/data/standard-classes.json$(NC)"
 
 ##@ Git Workflow
 commit: lint test ## Lint, test, auto-generate commit message, commit, and push
 	@echo "Generating commit message via Bedrock..."
 	@git add . && \
-	COMMIT_MESSAGE=$$(bash scripts/generate_commit_message.sh) && \
+	COMMIT_MESSAGE=$$(bash 090_scripts/maintenance/generate_commit_message.sh) && \
 	echo "Commit message: $$COMMIT_MESSAGE" && \
 	git commit -m "$$COMMIT_MESSAGE" && \
 	git push
@@ -308,7 +308,7 @@ commit: lint test ## Lint, test, auto-generate commit message, commit, and push
 fastcommit: fastlint ## Fast lint only, auto-generate commit message, commit, and push
 	@echo "Generating commit message via Bedrock..."
 	@git add . && \
-	COMMIT_MESSAGE=$$(bash scripts/generate_commit_message.sh) && \
+	COMMIT_MESSAGE=$$(bash 090_scripts/maintenance/generate_commit_message.sh) && \
 	echo "Commit message: $$COMMIT_MESSAGE" && \
 	git commit -m "$$COMMIT_MESSAGE" && \
 	git push
@@ -328,45 +328,45 @@ endif
 		 exit 1)
 	@echo "Updating version to $(V)..."
 	@echo "$(V)" > VERSION
-	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' lib/idp_cli_pkg/pyproject.toml && rm -f lib/idp_cli_pkg/pyproject.toml.bak
-	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' lib/idp_sdk/pyproject.toml && rm -f lib/idp_sdk/pyproject.toml.bak
-	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' lib/idp_common_pkg/pyproject.toml && rm -f lib/idp_common_pkg/pyproject.toml.bak
-	@sed -i.bak 's/version=".*"/version="$(V)"/' lib/idp_common_pkg/setup.py && rm -f lib/idp_common_pkg/setup.py.bak
-	@sed -i.bak 's/@click.version_option(version=".*")/@click.version_option(version="$(V)")/' lib/idp_cli_pkg/idp_cli/cli.py && rm -f lib/idp_cli_pkg/idp_cli/cli.py.bak
-	@sed -i.bak 's/^__version__ = ".*"/__version__ = "$(V)"/' lib/idp_sdk/idp_sdk/__init__.py && rm -f lib/idp_sdk/idp_sdk/__init__.py.bak
-	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' lib/idp_mcp_connector_pkg/pyproject.toml && rm -f lib/idp_mcp_connector_pkg/pyproject.toml.bak
-	@sed -i.bak 's/^__version__ = ".*"/__version__ = "$(V)"/' lib/idp_mcp_connector_pkg/idp_mcp_connector/__init__.py && rm -f lib/idp_mcp_connector_pkg/idp_mcp_connector/__init__.py.bak
+	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' 020_shared/idp-packages/idp_cli_pkg/pyproject.toml && rm -f 020_shared/idp-packages/idp_cli_pkg/pyproject.toml.bak
+	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' 020_shared/idp-packages/idp_sdk/pyproject.toml && rm -f 020_shared/idp-packages/idp_sdk/pyproject.toml.bak
+	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' 020_shared/idp-packages/idp_common_pkg/pyproject.toml && rm -f 020_shared/idp-packages/idp_common_pkg/pyproject.toml.bak
+	@sed -i.bak 's/version=".*"/version="$(V)"/' 020_shared/idp-packages/idp_common_pkg/setup.py && rm -f 020_shared/idp-packages/idp_common_pkg/setup.py.bak
+	@sed -i.bak 's/@click.version_option(version=".*")/@click.version_option(version="$(V)")/' 020_shared/idp-packages/idp_cli_pkg/idp_cli/cli.py && rm -f 020_shared/idp-packages/idp_cli_pkg/idp_cli/cli.py.bak
+	@sed -i.bak 's/^__version__ = ".*"/__version__ = "$(V)"/' 020_shared/idp-packages/idp_sdk/idp_sdk/__init__.py && rm -f 020_shared/idp-packages/idp_sdk/idp_sdk/__init__.py.bak
+	@sed -i.bak 's/^version = ".*"/version = "$(V)"/' 020_shared/idp-packages/idp_mcp_connector_pkg/pyproject.toml && rm -f 020_shared/idp-packages/idp_mcp_connector_pkg/pyproject.toml.bak
+	@sed -i.bak 's/^__version__ = ".*"/__version__ = "$(V)"/' 020_shared/idp-packages/idp_mcp_connector_pkg/idp_mcp_connector/__init__.py && rm -f 020_shared/idp-packages/idp_mcp_connector_pkg/idp_mcp_connector/__init__.py.bak
 	@echo -e "$(GREEN)✅ Version updated to $(V) in:$(NC)"
 	@echo "  - VERSION"
-	@echo "  - lib/idp_cli_pkg/pyproject.toml"
-	@echo "  - lib/idp_cli_pkg/idp_cli/cli.py"
-	@echo "  - lib/idp_sdk/pyproject.toml"
-	@echo "  - lib/idp_sdk/idp_sdk/__init__.py"
-	@echo "  - lib/idp_common_pkg/pyproject.toml"
-	@echo "  - lib/idp_common_pkg/setup.py"
-	@echo "  - lib/idp_mcp_connector_pkg/pyproject.toml"
-	@echo "  - lib/idp_mcp_connector_pkg/idp_mcp_connector/__init__.py"
+	@echo "  - 020_shared/idp-packages/idp_cli_pkg/pyproject.toml"
+	@echo "  - 020_shared/idp-packages/idp_cli_pkg/idp_cli/cli.py"
+	@echo "  - 020_shared/idp-packages/idp_sdk/pyproject.toml"
+	@echo "  - 020_shared/idp-packages/idp_sdk/idp_sdk/__init__.py"
+	@echo "  - 020_shared/idp-packages/idp_common_pkg/pyproject.toml"
+	@echo "  - 020_shared/idp-packages/idp_common_pkg/setup.py"
+	@echo "  - 020_shared/idp-packages/idp_mcp_connector_pkg/pyproject.toml"
+	@echo "  - 020_shared/idp-packages/idp_mcp_connector_pkg/idp_mcp_connector/__init__.py"
 
 ##@ Documentation
 docs: docs-build ## Build and serve the documentation site locally
 	@echo "Starting docs preview server..."
-	cd docs-site && npm run preview
+	cd 001_docs/docs-site && npm run preview
 
 docs-setup: ## One-time docs site setup (symlinks + npm install)
 	@echo "Setting up documentation site..."
-	cd docs-site && bash setup.sh && npm install
+	cd 001_docs/docs-site && bash setup.sh && npm install
 	@echo -e "$(GREEN)✅ Docs site setup complete!$(NC)"
 
 docs-build: docs-setup ## Build documentation site (no serve)
 	@echo "Building documentation site..."
-	cd docs-site && npm run build
+	cd 001_docs/docs-site && npm run build
 	@echo -e "$(GREEN)✅ Docs site built! $(NC)"
 	@echo "Preview at: http://localhost:4321"
 
 docs-deploy: docs-build ## Deploy docs to GitHub Pages (from local build)
 	@echo "Deploying documentation site to GitHub Pages..."
-	touch docs-site/dist/.nojekyll
-	cd docs-site && npx gh-pages -d dist --dotfiles --repo https://github.com/aws-solutions-library-samples/accelerated-intelligent-document-processing-on-aws.git
+	touch 001_docs/docs-site/dist/.nojekyll
+	cd 001_docs/docs-site && npx gh-pages -d dist --dotfiles --repo https://github.com/aws-solutions-library-samples/accelerated-intelligent-document-processing-on-aws.git
 	@echo -e "$(GREEN)✅ Docs deployed to GitHub Pages!$(NC)"
 
 ##@ Security (DSR)
@@ -382,12 +382,12 @@ dsr: ## Run full DSR workflow (setup → scan → optional fix)
 
 dsr-setup: ## Set up DSR tool
 	@echo "Setting up DSR tool..."
-	$(PYTHON) scripts/dsr/setup.py
+	$(PYTHON) 090_scripts/maintenance/dsr/setup.py
 
 dsr-scan: ## Run DSR security scan
 	@echo "Running DSR security scan..."
-	$(PYTHON) scripts/dsr/run.py
+	$(PYTHON) 090_scripts/maintenance/dsr/run.py
 
 dsr-fix: ## Run DSR interactive fix
 	@echo "Running DSR interactive fix..."
-	$(PYTHON) scripts/dsr/fix.py
+	$(PYTHON) 090_scripts/maintenance/dsr/fix.py

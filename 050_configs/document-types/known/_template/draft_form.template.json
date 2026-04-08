@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Document Type Manual Review Form Template",
+  "description": "Copy this template and customize for your known document type. This form is used in manual review workflows.",
+  "type": "object",
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Unique identifier for the document"
+    },
+    "document_type": {
+      "type": "string",
+      "description": "The document type being reviewed"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["approved", "rejected", "needs_correction"]
+    },
+    "reviewer_notes": {
+      "type": "string",
+      "description": "Comments from the manual reviewer"
+    },
+    "corrections": {
+      "type": "object",
+      "description": "Field corrections made during manual review",
+      "additionalProperties": true
+    }
+  },
+  "required": ["document_id", "document_type", "review_status"]
+}

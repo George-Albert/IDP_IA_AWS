@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Unknown Document Type Capture Form",
+  "description": "Used for capturing and classifying documents of unknown types. This initiates the onboarding workflow.",
+  "type": "object",
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Unique identifier for the document"
+    },
+    "suggested_type": {
+      "type": "string",
+      "description": "Initial user-suggested classification"
+    },
+    "visual_characteristics": {
+      "type": "object",
+      "properties": {
+        "layout_type": {
+          "type": "string",
+          "enum": ["tabular", "narrative", "form", "mixed"],
+          "description": "Primary layout structure"
+        },
+        "pages": {
+          "type": "integer",
+          "description": "Number of pages"
+        }
+      }
+    },
+    "sample_fields_observed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Initial field names/labels identified on the document"
+    },
+    "onboarding_status": {
+      "type": "string",
+      "enum": ["pending_review", "schema_draft", "in_training", "active"],
+      "default": "pending_review"
+    }
+  },
+  "required": ["document_id"]
+}
