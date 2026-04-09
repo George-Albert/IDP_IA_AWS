@@ -882,7 +882,8 @@ AFTER:
 | `010_infra/Dockerfile.optimized` | 26, 34 | 2 | Docker COPY + sed pattern |
 | `010_infra/iam-roles/cloudformation-management/README.md` | 5 | 1 | Documentation link |
 
-**Total Final Cleanups:** 7 files changed, 7 path references corrected
+**Total Final Cleanups:** 8 files changed, 8 path references corrected
+- Added: `.gitlab-ci.yml` line 140 - integration test deployment script path
 
 ---
 

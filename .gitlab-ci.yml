@@ -137,7 +137,7 @@ integration_tests:
     - export IDP_PIPELINE_NAME=genaiic-sdlc-deploy-pipeline
 
     # Run integration test deployment
-    - python3 scripts/sdlc/integration_test_deployment.py
+    - python3 090_scripts/maintenance/sdlc/integration_test_deployment.py
 
   after_script:
     # Display CodeBuild logs directly in GitLab runner console
